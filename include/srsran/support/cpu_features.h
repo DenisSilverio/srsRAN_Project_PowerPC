@@ -67,6 +67,10 @@ enum class cpu_feature {
   /// CPU supports carry-less multiplication instruction PMULL.
   pmull,
 #endif // __aarch64__
+#ifdef __powerpc64__
+  /// CPU supports floating point multiply-add.
+  fma,
+#endif //__powerpc64__
 };
 
 constexpr const char* to_string(cpu_feature feature)
@@ -145,6 +149,10 @@ inline bool cpu_supports_feature(cpu_feature feature)
     case cpu_feature::pmull:
       return ::getauxval(AT_HWCAP) & HWCAP_PMULL;
 #endif // __aarch64__
+#ifdef __powerpc64__ 
+    case cpu_feature::fma:
+      return true;
+#endif // __powerpc64__
     default:
       return false;
   }
@@ -192,6 +200,11 @@ constexpr auto cpu_features_included = to_array<cpu_feature>({
     cpu_feature::neon,
 #endif // __ARM_NEON
 #endif // __aarch64__
+#ifdef __powerpc64__
+#ifdef __VSX__
+    cpu_feature::fma,
+#endif // __VSX__
+#endif //__powerpc64__
 });
 } // namespace detail
 
@@ -209,6 +222,9 @@ inline std::string get_cpu_feature_info()
 #ifdef __aarch64__
     fmt::format_to(std::back_inserter(buffer), "{}{}", buffer.size() == 0 ? "" : " ", feature);
 #endif // __aarch64__
+#ifdef __powerpc64__
+    format_to(buffer, "{}{}", buffer.size() == 0 ? "" : " ", feature);
+#endif //__powerpc64__
   }
   return std::string{srsran::to_c_str(buffer)};
 }
