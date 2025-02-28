@@ -106,6 +106,10 @@ constexpr const char* to_string(cpu_feature feature)
     case cpu_feature::pmull:
       return "pmull";
 #endif // __aarch64__
+#ifdef __powerpc64__ 
+    case cpu_feature::fma:
+      return "fma";
+#endif // __powerpc64__
   }
   return "invalid_cpu_feature";
 }
