@@ -227,7 +227,7 @@ inline std::string get_cpu_feature_info()
     fmt::format_to(std::back_inserter(buffer), "{}{}", buffer.size() == 0 ? "" : " ", feature);
 #endif // __aarch64__
 #ifdef __powerpc64__
-    format_to(buffer, "{}{}", buffer.size() == 0 ? "" : " ", feature);
+    fmt::format_to(std::back_inserter(buffer), "{}{}", buffer.size() == 0 ? "" : " ", feature);
 #endif //__powerpc64__
   }
   return std::string{srsran::to_c_str(buffer)};
